@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" /><meta name="theme-color" content="#0b1320" /><title>Tornado Atlas</title><meta name="description" content="Tornado Atlas features tornado formation science, the Enhanced Fujita Scale, major records, historic outbreaks, preparedness guidance, and a searchable fact library." /><style> :root{ --bg:#07111f; --bg2:#0d1c33; --panel:rgba(11,22,39,.78); --panel-2:rgba(15,32,57,.88); --line:rgba(255,255,255,.10); --text:#ecf5ff; --muted:#9bb2c8; --accent:#62d3ff; --accent2:#6ef0c2; --warn:#ffbf5a; --danger:#ff7272; --shadow:0 20px 60px rgba(0,0,0,.35); --radius:22px; --safe-top: max(14px, env(safe-area-inset-top)); --safe-bottom: max(16px, env(safe-area-inset-bottom)); } *{box-sizing:border-box;-webkit-tap-highlight-color:transparent} html,body{margin:0;padding:0;background:radial-gradient(1200px 700px at 50% -10%, #17345f 0%, var(--bg) 52%, #040910 100%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,Helvetica,Arial,sans-serif;min-height:100%} body{overflow-x:hidden} body::before{ content:"";position:fixed;inset:0;pointer-events:none;opacity:.18; background: radial-gradient(circle at 20% 18%, rgba(98,211,255,.18), transparent 22%), radial-gradient(circle at 80% 9%, rgba(110,240,194,.12), transparent 18%), radial-gradient(circle at 50% 115%, rgba(255,255,255,.08), transparent 22%), linear-gradient(180deg, rgba(255,255,255,.02), transparent 32%); filter: blur(6px); } .app{max-width:940px;margin:0 auto;padding:var(--safe-top) 14px calc(86px + var(--safe-bottom))} .app{width:min(100%, 1320px);margin:0 auto;padding:var(--safe-top) clamp(14px, 2.4vw, 28px) calc(96px + var(--safe-bottom))} .hero{padding:clamp(22px, 3vw, 34px);border-radius:clamp(24px, 3vw, 32px)} .hero-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(12px,1.6vw,16px)} .section-title h2{font-size:clamp(28px, 3.2vw, 40px)} .section-title p{font-size:clamp(14px, 1.4vw, 16px)} .card{padding:clamp(18px, 2vw, 24px);border-radius:clamp(22px, 2.4vw, 28px)} .card h3{font-size:clamp(20px, 2vw, 26px)} .card p{font-size:clamp(14.5px, 1.2vw, 16.5px)} .metric b{font-size:clamp(22px, 2.6vw, 32px)} .metric span,.mini span,.step p,.record p,.ef p,.event p,.fact span,.alert span{font-size:clamp(13px, 1.05vw, 15px)} .mini strong,.step h4,.record h4,.ef h4,.event h4,.fact strong,.alert strong{font-size:clamp(14px, 1.15vw, 16px)} .toolbar{gap:12px;padding:18px 2px 6px} .tab{padding:12px 15px;font-size:13px} .search{font-size:16px} .footer{font-size:13px} @media (min-width: 820px){ .two{grid-template-columns:repeat(2,minmax(0,1fr))} .three{grid-template-columns:repeat(3,minmax(0,1fr))} .section-title{margin:20px 4px 14px} .bottom-nav{left:50%;transform:translateX(-50%);width:min(760px, calc(100% - 28px));} } @media (min-width: 1100px){ .app{padding-bottom:42px} .hero-grid{grid-template-columns:repeat(4,minmax(0,1fr))} .bottom-nav{display:none} } @media (max-width: 560px){ .hero-grid,.mini-grid{grid-template-columns:1fr} .section-title{align-items:flex-start} .section-title p{text-align:left} .tab{font-size:12.5px} } .hero{ position:relative;overflow:hidden; padding:22px;border:1px solid var(--line);border-radius:28px;box-shadow:var(--shadow); background:linear-gradient(155deg, rgba(12,25,44,.96), rgba(9,16,28,.88)); backdrop-filter: blur(18px); } .hero::after{ content:"";position:absolute;right:-40px;top:-60px;width:220px;height:220px;border-radius:50%; background:conic-gradient(from 0deg, rgba(98,211,255,.26), rgba(110,240,194,.14), rgba(98,211,255,.02), rgba(98,211,255,.26)); filter: blur(6px); animation:spin 12s linear infinite; } @keyframes spin{to{transform:rotate(360deg)}} .eyebrow{display:inline-flex;gap:8px;align-items:center;padding:7px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.12);color:var(--accent);background:rgba(255,255,255,.04);font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase} h1{font-size:clamp(31px, 9vw, 58px);line-height:.95;margin:16px 0 8px;letter-spacing:-.04em;max-width:540px} .sub{font-size:15.5px;line-height:1.55;color:var(--muted);max-width:650px;margin:0 0 18px} .hero-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:18px} .metric{padding:14px;border-radius:18px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.09)} .metric b{display:block;font-size:22px;letter-spacing:-.03em;margin-bottom:4px} .metric span{color:var(--muted);font-size:13px;line-height:1.35} .toolbar{display:flex;gap:10px;overflow:auto;padding:16px 2px 4px;margin:10px 0 2px;scrollbar-width:none} .toolbar::-webkit-scrollbar{display:none} .tab{ border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--text);padding:11px 14px;border-radius:999px; font-size:13px;font-weight:700;white-space:nowrap } .tab.active{background:linear-gradient(180deg, rgba(98,211,255,.18), rgba(98,211,255,.08));border-color:rgba(98,211,255,.35);color:#f8fdff;box-shadow:0 10px 30px rgba(98,211,255,.14)} .pages{position:relative;margin-top:8px} .page{display:none;animation:fade .35s ease} .page.active{display:block} @keyframes fade{from{opacity:.1;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}} .section-title{display:flex;align-items:end;justify-content:space-between;gap:14px;margin:14px 2px 12px} .section-title h2{margin:0;font-size:28px;letter-spacing:-.04em} .section-title p{margin:0;color:var(--muted);font-size:14px;max-width:430px;text-align:right} .grid{display:grid;gap:14px} .two{grid-template-columns:1fr} .three{grid-template-columns:1fr} .card{ position:relative;overflow:hidden;padding:18px;border-radius:24px;border:1px solid var(--line); background:linear-gradient(180deg, var(--panel), var(--panel-2));box-shadow:var(--shadow);backdrop-filter:blur(16px); } .card h3{margin:0 0 9px;font-size:20px;letter-spacing:-.03em} .card p{margin:0;color:var(--muted);font-size:14.5px;line-height:1.62} .card + .card{margin-top:0} .mini-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:14px} .mini{padding:12px;border-radius:16px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.08)} .mini strong{display:block;font-size:14px;margin-bottom:4px} .mini span{font-size:12.5px;color:var(--muted);line-height:1.45} .storm-diagram{display:grid;gap:10px;margin-top:14px} .step{display:flex;gap:12px;align-items:flex-start;padding:12px 12px;border-radius:18px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08)} .num{flex:0 0 32px;height:32px;border-radius:50%;display:grid;place-items:center;font-weight:800;background:linear-gradient(180deg, rgba(98,211,255,.22), rgba(98,211,255,.08));border:1px solid rgba(98,211,255,.28)} .step h4{margin:0 0 4px;font-size:15px} .step p{margin:0;font-size:13px;color:var(--muted);line-height:1.5} .badge-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px} .badge{padding:7px 10px;border-radius:999px;font-size:12px;font-weight:700;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.05);color:var(--muted)} .record-list{display:grid;gap:12px} .record{padding:14px;border-radius:18px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04)} .record .top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:8px} .record h4{margin:0;font-size:16px} .pill{padding:6px 9px;border-radius:999px;font-size:11px;font-weight:800;white-space:nowrap;background:rgba(98,211,255,.12);border:1px solid rgba(98,211,255,.28);color:var(--accent)} .record p{margin:0;color:var(--muted);font-size:13.5px;line-height:1.52} .scale{display:grid;gap:10px} .ef{display:grid;grid-template-columns:auto 1fr;gap:12px;padding:13px;border-radius:18px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.08)} .ef .box{width:52px;height:52px;border-radius:16px;display:grid;place-items:center;font-weight:900;font-size:17px;background:linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.05));border:1px solid rgba(255,255,255,.1)} .ef h4{margin:0 0 3px;font-size:15px} .ef p{margin:0;font-size:13px;color:var(--muted);line-height:1.48} .timeline{display:grid;gap:10px} .event{position:relative;padding-left:18px} .event::before{content:"";position:absolute;left:3px;top:7px;bottom:-10px;width:2px;background:rgba(255,255,255,.12)} .event::after{content:"";position:absolute;left:0;top:7px;width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 6px rgba(98,211,255,.12)} .event:last-child::before{display:none} .event h4{margin:0 0 4px;font-size:15px} .event p{margin:0;color:var(--muted);font-size:13px;line-height:1.53} .alert-grid{display:grid;gap:10px;margin-top:12px} .alert{padding:13px;border-radius:18px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.045)} .alert strong{display:block;margin-bottom:5px} .alert.warn strong{color:var(--warn)} .alert.danger strong{color:var(--danger)} .alert.info strong{color:var(--accent)} canvas{width:100%;height:240px;display:block;border-radius:20px;background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));border:1px solid rgba(255,255,255,.07)} .search-wrap{margin-top:12px;position:sticky;top:8px;z-index:2} .search{width:100%;border:none;outline:none;border-radius:16px;padding:14px 16px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);color:var(--text);font-size:15px;box-shadow:var(--shadow)} .search::placeholder{color:#82a0bb} .fact-list{display:grid;gap:10px;margin-top:14px} .fact{padding:12px 14px;border-radius:16px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.08)} .fact strong{display:block;margin-bottom:4px;font-size:14px} .fact span{font-size:13px;color:var(--muted);line-height:1.5} .footer{padding:16px 4px 4px;color:var(--muted);font-size:12.5px;line-height:1.6} .bottom-nav{ position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom)); display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:10px;border-radius:24px; background:rgba(7,14,24,.88);border:1px solid rgba(255,255,255,.1);backdrop-filter:blur(18px);box-shadow:var(--shadow);z-index:30; } .nav-btn{border:none;background:transparent;color:var(--muted);padding:10px 6px;border-radius:16px;font-size:11px;font-weight:800;line-height:1.1} .nav-btn.active{background:rgba(98,211,255,.12);border:1px solid rgba(98,211,255,.28);color:var(--text)} .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace} a{color:var(--accent2);text-decoration:none} @media (min-width:760px){ .app{padding-left:20px;padding-right:20px} .two{grid-template-columns:1fr 1fr} .three{grid-template-columns:repeat(3,1fr)} .hero-grid{grid-template-columns:repeat(4,1fr)} .section-title p{text-align:right} .bottom-nav{display:none} } /* Desktop-first production polish */
+:root{ --content-width: min(1480px, calc(100vw - 72px)); --panel: rgba(10,16,28,.76); --panel-2: rgba(15,23,42,.88); --line: rgba(255,255,255,.08); --shadow-xl: 0 24px 80px rgba(0,0,0,.34);
+} html, body{ min-height: 100%;
+} body{ background: radial-gradient(circle at 15% 20%, rgba(70,110,190,.16), transparent 28%), radial-gradient(circle at 82% 18%, rgba(255,255,255,.06), transparent 22%), linear-gradient(180deg, #08101d 0%, #0b1220 48%, #09111e 100%);
+} .app{ width: var(--content-width); max-width: none; padding: clamp(28px, 3vw, 42px) clamp(24px, 2vw, 32px) 42px;
+} .hero{ padding: clamp(30px, 3vw, 42px); border-radius: 34px; background: linear-gradient(135deg, rgba(15,23,42,.96), rgba(11,18,32,.88)), radial-gradient(circle at top right, rgba(88,140,255,.12), transparent 34%); border: 1px solid var(--line); box-shadow: var(--shadow-xl);
+} .hero h1{ font-size: clamp(42px, 4.5vw, 68px); line-height: 0.96; letter-spacing: -0.04em;
+} .hero p{ max-width: 980px; font-size: clamp(17px, 1.2vw, 20px); line-height: 1.7; opacity: .92;
+} .hero-grid{ grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; margin-top: 22px;
+} .section{ margin-top: 28px;
+} .section-title{ margin: 6px 6px 18px; display: flex; align-items: end; justify-content: space-between; gap: 18px;
+} .section-title h2{ font-size: clamp(28px, 2.35vw, 42px); letter-spacing: -0.03em;
+} .section-title p{ max-width: 760px; font-size: 15px; opacity: .84;
+} .card{ padding: 24px; border-radius: 28px; background: linear-gradient(180deg, rgba(17,24,39,.92), rgba(10,16,28,.88)); border: 1px solid var(--line); box-shadow: 0 18px 44px rgba(0,0,0,.2); backdrop-filter: blur(10px);
+} .card h3{ font-size: clamp(22px, 1.5vw, 28px); letter-spacing: -0.02em;
+} .card p{ font-size: 15.5px; line-height: 1.72;
+} .grid,
+.two,
+.three,
+.hero-grid,
+.mini-grid,
+.records-grid,
+.events-grid,
+.facts-grid,
+.alert-grid,
+.ef-grid{ gap: 18px !important;
+} .two{ grid-template-columns: repeat(2, minmax(0,1fr)); }
+.three{ grid-template-columns: repeat(3, minmax(0,1fr)); } .metric, .mini, .record, .event, .fact, .alert, .ef, .step{ background: linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.015)); border: 1px solid rgba(255,255,255,.07); border-radius: 22px; padding: 18px;
+} .metric b{ display:block; font-size: clamp(24px, 2vw, 34px); letter-spacing: -0.03em; margin-bottom: 6px;
+} .toolbar{ position: sticky; top: 0; z-index: 20; padding: 14px 0 14px; margin-bottom: 10px; backdrop-filter: blur(14px);
+} .tabs{ display:flex; flex-wrap:wrap; gap:10px; padding: 12px; border-radius: 22px; background: rgba(8,13,24,.66); border: 1px solid rgba(255,255,255,.08); box-shadow: 0 10px 32px rgba(0,0,0,.18);
+} .tab{ padding: 12px 16px; border-radius: 14px; font-size: 13px; letter-spacing: .01em;
+} .tab.active{ transform: translateY(-1px); box-shadow: 0 10px 24px rgba(0,0,0,.18);
+} .search-wrap{ max-width: 760px;
+} .search{ min-height: 56px; padding: 16px 18px; border-radius: 16px; background: rgba(255,255,255,.045); border: 1px solid rgba(255,255,255,.08); font-size: 16px;
+} .footer{ margin-top: 30px; padding: 22px 8px 10px; font-size: 13px; opacity: .76;
+} .bottom-nav{ display:none !important;
+} /* Wide-screen refinements */
+@media (min-width: 1280px){ .app{ width: min(1540px, calc(100vw - 88px)); } .records-grid, .events-grid, .facts-grid{ grid-template-columns: repeat(3, minmax(0, 1fr)); }
+} /* Tablet */
+@media (max-width: 1024px){ :root{ --content-width: min(100vw - 36px, 1180px); } .hero-grid{ grid-template-columns: repeat(2, minmax(0,1fr)); } .three{ grid-template-columns: repeat(2, minmax(0,1fr)); } .section-title{ flex-direction: column; align-items: flex-start; }
+} /* Phone */
+@media (max-width: 700px){ :root{ --content-width: calc(100vw - 22px); } .app{ padding: 14px 0 96px; } .hero{ border-radius: 24px; padding: 22px; } .hero h1{ font-size: clamp(34px, 11vw, 48px); } .hero-grid, .two, .three, .records-grid, .events-grid, .facts-grid, .alert-grid, .ef-grid, .mini-grid{ grid-template-columns: 1fr !important; } .tabs{ gap: 8px; border-radius: 18px; } .tab{ flex: 1 1 calc(50% - 8px); text-align:center; }
+}
+
+/* Refined author tag */
+.credit-tag{
+  display:inline-block;
+  margin-top:10px;
+  font-size:12.5px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:rgba(255,255,255,.6);
+  padding:6px 10px;
+  border-radius:999px;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.1);
+  backdrop-filter: blur(6px);
+}
+
+/* Premium access lock */
+body.locked #topTabs,
+body.locked #page-formation,
+body.locked #page-scale,
+body.locked #page-records,
+body.locked #page-history,
+body.locked #page-safety,
+body.locked #page-facts,
+body.locked #page-sources{
+  filter: blur(15px) saturate(.82);
+  opacity: .34;
+  pointer-events: none;
+  user-select: none;
+  transform: scale(.996);
+}
+
+body.locked #page-home{
+  opacity: 1;
+  pointer-events: auto;
+}
+
+body.locked .page.active:not(#page-home){
+  display:block;
+}
+
+.unlock-dock{
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 80;
+  width: min(420px, calc(100vw - 34px));
+}
+
+.unlock-panel{
+  position: relative;
+  overflow: hidden;
+  border-radius: 28px;
+  padding: 22px 22px 20px;
+  border: 1px solid rgba(255,255,255,.12);
+  background:
+    linear-gradient(180deg, rgba(11,17,30,.88), rgba(8,13,24,.92)),
+    radial-gradient(circle at top right, rgba(98,211,255,.18), transparent 34%),
+    radial-gradient(circle at bottom left, rgba(110,240,194,.13), transparent 28%);
+  box-shadow:
+    0 28px 80px rgba(0,0,0,.42),
+    inset 0 1px 0 rgba(255,255,255,.08);
+  backdrop-filter: blur(18px);
+}
+
+.unlock-panel::before{
+  content:"";
+  position:absolute;
+  inset:-1px;
+  border-radius: inherit;
+  pointer-events:none;
+  background: linear-gradient(135deg, rgba(255,255,255,.14), rgba(255,255,255,0) 28%, rgba(98,211,255,.1) 64%, rgba(110,240,194,.08));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  padding:1px;
+  opacity:.8;
+}
+
+.unlock-orb{
+  position:absolute;
+  width:140px;
+  height:140px;
+  border-radius:50%;
+  filter: blur(26px);
+  opacity:.26;
+  pointer-events:none;
+}
+.unlock-orb.a{ top:-34px; right:-18px; background: rgba(98,211,255,.6); }
+.unlock-orb.b{ bottom:-52px; left:-16px; background: rgba(110,240,194,.42); }
+
+.unlock-kicker{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 11px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.08);
+  background: rgba(255,255,255,.04);
+  color: rgba(255,255,255,.78);
+  font-size:11px;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  margin-bottom:14px;
+}
+
+.unlock-panel h3{
+  margin:0 0 10px;
+  font-size: clamp(22px, 1.8vw, 30px);
+  letter-spacing:-.03em;
+  line-height:1.02;
+}
+
+.unlock-panel p{
+  margin:0;
+  color: rgba(236,245,255,.78);
+  font-size: 14.5px;
+  line-height:1.65;
+}
+
+.unlock-actions{
+  display:flex;
+  gap:12px;
+  margin-top:18px;
+  flex-wrap:wrap;
+}
+
+.unlock-btn{
+  appearance:none;
+  border:none;
+  outline:none;
+  cursor:pointer;
+  min-height:52px;
+  padding:0 18px;
+  border-radius:16px;
+  font-weight:700;
+  letter-spacing:.01em;
+  transition: transform .22s ease, box-shadow .22s ease, opacity .22s ease, background .22s ease;
+}
+
+.unlock-btn.primary{
+  color:#07111f;
+  background: linear-gradient(135deg, #92e6ff, #86ffd7);
+  box-shadow: 0 16px 34px rgba(110,240,194,.18), inset 0 1px 0 rgba(255,255,255,.48);
+}
+
+.unlock-btn.secondary{
+  color: var(--text);
+  background: rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.08);
+}
+
+.unlock-btn:hover{ transform: translateY(-1px); }
+.unlock-btn:active{ transform: translateY(0); }
+
+.unlock-note{
+  margin-top:12px;
+  font-size:12px;
+  color: rgba(255,255,255,.56);
+}
+
+.lock-banner{
+  margin-top: 18px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  padding:15px 16px;
+  border-radius:18px;
+  background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.025));
+  border:1px solid rgba(255,255,255,.07);
+}
+.lock-banner strong{
+  display:block;
+  font-size:14px;
+  margin-bottom:4px;
+}
+.lock-banner span{
+  display:block;
+  color: rgba(255,255,255,.68);
+  font-size:12.5px;
+  line-height:1.5;
+}
+.lock-pill{
+  flex: 0 0 auto;
+  padding:9px 12px;
+  border-radius:999px;
+  color: #cff8ff;
+  background: rgba(98,211,255,.08);
+  border:1px solid rgba(98,211,255,.18);
+  font-size:12px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+
+.unlock-dock.hidden{
+  display:none;
+}
+
+.signed-in-chip{
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 80;
+  display:none;
+  align-items:center;
+  gap:12px;
+  padding:14px 16px;
+  border-radius:18px;
+  background: rgba(8,13,24,.78);
+  border:1px solid rgba(255,255,255,.08);
+  box-shadow: 0 20px 50px rgba(0,0,0,.28);
+  backdrop-filter: blur(14px);
+}
+.signed-in-chip img{
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  object-fit:cover;
+}
+.signed-in-chip strong{
+  display:block;
+  font-size:13.5px;
+}
+.signed-in-chip span{
+  display:block;
+  font-size:12px;
+  color: rgba(255,255,255,.62);
+}
+
+@keyframes cardFloat {
+  0%,100% { transform: translateY(0px); }
+  50% { transform: translateY(-4px); }
+}
+body.locked .unlock-dock{ animation: cardFloat 6s ease-in-out infinite; }
+
+@media (max-width: 920px){
+  .unlock-dock{
+    right: 16px;
+    left: 16px;
+    width: auto;
+    bottom: 16px;
+  }
+  .signed-in-chip{
+    right: 16px;
+    left: 16px;
+    bottom: 16px;
+    width: auto;
+  }
+}
+
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script></head>
+<body class="locked"><div class="app"><section class="hero"><div class="eyebrow"></div><h1>Explore tornado science, records, preparedness, and historic events in one clear reference.</h1>
+<span class="credit-tag">Created by Alex</span>
+<p class="sub">A polished covering how tornadoes form, the EF Scale, major U.S. records, historic outbreaks, alert terms, and a searchable fact library.</p><div class="hero-grid"><div class="metric"><b>~1,200</b><span>Approximate tornadoes that hit the U.S. each year in NOAA educational material.</span></div><div class="metric"><b>1,225</b><span>1991–2020 annual average cited by NOAA NCEI in its 2024 climate summary.</span></div><div class="metric"><b>318 mph</b><span>Highest recorded tornado wind speed, measured by mobile Doppler radar near Bridge Creek/Moore, Oklahoma.</span></div><div class="metric"><b>219 mi</b><span>Historic path length associated with the 1925 Tri-State Tornado, the longest on record in U.S. references.</span></div></div></section>
+<div class="unlock-dock" id="unlockDock" aria-live="polite">
+  <div class="unlock-panel">
+    <div class="unlock-orb a"></div>
+    <div class="unlock-orb b"></div>
+    <div class="unlock-kicker">Member Access</div>
+    <h3>Unlock the full Tornado Atlas</h3>
+    <p>Sign in with Google to open the complete records library, historic event archive, advanced safety sections, full fact database, and source reference pages.</p>
+    <div class="unlock-actions">
+      <button class="unlock-btn primary" id="googleUnlockBtn">Continue with Google</button>
+      <button class="unlock-btn secondary" id="learnMoreBtn" type="button">What opens?</button>
+    </div>
+    <div class="lock-banner">
+      <div>
+        <strong>Currently open</strong>
+        <span>Main title area and Overview section remain visible before sign-in.</span>
+      </div>
+      <div class="lock-pill">Locked</div>
+    </div>
+    <div class="unlock-note">Use your Supabase Google provider settings and add your project URL plus anon key below before deployment.</div>
+  </div>
+</div>
+
+<div class="signed-in-chip" id="signedInChip">
+  <img id="signedInAvatar" alt="" />
+  <div>
+    <strong id="signedInName">Signed in</strong>
+    <span>Full access unlocked</span>
+  </div>
+</div>
+<div class="toolbar" id="topTabs"><button class="tab active" data-page="home">Overview</button><button class="tab" data-page="formation">Formation</button><button class="tab" data-page="scale">EF Scale</button><button class="tab" data-page="records">Records</button><button class="tab" data-page="history">Historic Events</button><button class="tab" data-page="safety">Safety</button><button class="tab" data-page="facts">Fact Finder</button><button class="tab" data-page="sources">Sources</button></div><main class="pages"><section class="page active" id="page-home"><div class="section-title"><h2>Overview</h2><p>A focused reference on how tornadoes develop, how they are rated, how risk is communicated, and which events shaped tornado history.</p></div><div class="grid two"><article class="card"><h3>What a tornado is</h3><p>A tornado is a violently rotating column of air in contact with the ground and attached to a thunderstorm. Many of the strongest tornadoes come from supercells, which are long-lived rotating thunderstorms with a mesocyclone detected on radar.</p><div class="badge-row"><span class="badge">Rotating thunderstorm</span><span class="badge">Ground contact</span><span class="badge">Extreme local winds</span></div><div class="mini-grid"><div class="mini"><strong>Supercell link</strong><span>Most large and violent tornadoes are associated with supercells.</span></div><div class="mini"><strong>Not fully solved</strong><span>NOAA notes that tornado formation is still not completely understood in detail.</span></div></div></article><article class="card"><h3>Tornado season at a glance</h3><p>In U.S. climatology, May usually has the highest count of tornado occurrences, June is second, and April is third. Tornadoes can still happen during any month if the atmosphere lines up the right way.</p><canvas id="seasonChart" width="800" height="480" aria-label="Seasonality chart"></canvas></article><article class="card"><h3>2024 and 2025 activity snapshot</h3><p>NOAA reported a record-setting May in 2024, and the annual 2025 preliminary total reached 1,559 tornado reports, well above the 1991–2020 annual average baseline.</p><canvas id="annualChart" width="800" height="480" aria-label="Annual comparison chart"></canvas></article><article class="card"><h3>Tornado shapes and types</h3><div class="mini-grid"><div class="mini"><strong>Rope</strong><span>Narrow, twisting, often late-life stage.</span></div><div class="mini"><strong>Cone</strong><span>Classic funnel widening toward the cloud base.</span></div><div class="mini"><strong>Wedge</strong><span>Very wide tornado, often wrapped in rain and debris.</span></div><div class="mini"><strong>Multi-vortex</strong><span>Smaller vortices orbit inside the main circulation.</span></div><div class="mini"><strong>Landspout</strong><span>Forms from surface-based stretching without a classic mesocyclone.</span></div><div class="mini"><strong>Waterspout</strong><span>Tornado-like vortex over water; some are tornadic, some fair-weather.</span></div></div></article></div></section><section class="page" id="page-formation"><div class="section-title"><h2>How tornadoes form</h2><p>Simple science first, then the storm-scale details behind supercell tornadoes.</p></div><div class="grid two"><article class="card"><h3>Step-by-step formation</h3><div class="storm-diagram"><div class="step"><div class="num">1</div><div><h4>Warm, moist air rises</h4><p>Thunderstorms feed on buoyant air near the ground. Moist unstable air helps power strong updrafts.</p></div></div><div class="step"><div class="num">2</div><div><h4>Wind shear creates spin</h4><p>Changing wind speed and direction with height can create horizontal tubes of rotating air.</p></div></div><div class="step"><div class="num">3</div><div><h4>The updraft tilts that spin upright</h4><p>Inside a supercell, the storm's updraft tilts the rotation into the vertical, helping build a mesocyclone.</p></div></div><div class="step"><div class="num">4</div><div><h4>Low-level inflow tightens the rotation</h4><p>Warm, moist air feeding the storm near the ground can intensify the lower-level circulation.</p></div></div><div class="step"><div class="num">5</div><div><h4>A tornado forms at the surface</h4><p>If the near-ground rotation strengthens enough and connects with the cloud-base circulation, a tornado can develop.</p></div></div></div></article><article class="card"><h3>Why supercells matter</h3><p>NOAA explains that the most destructive tornadoes occur from supercells. A supercell has a rotating updraft called a mesocyclone, and that larger storm-scale rotation can exist well before a tornado forms.</p><div class="fact-list"><div class="fact"><strong>Mesocyclone</strong><span>A broad rotating updraft that can be miles wide and can show up on Doppler radar before a tornado forms.</span></div><div class="fact"><strong>Storm-relative inflow</strong><span>Air streaming into the storm near the surface helps supply moisture and momentum to the circulation.</span></div><div class="fact"><strong>Downdrafts</strong><span>Rear-flank and forward-flank downdrafts can help reshape the near-ground environment and influence whether tornadogenesis happens.</span></div><div class="fact"><strong>Still an active science problem</strong><span>Researchers understand the broad setup, but NOAA still states the exact details of tornadogenesis are not fully understood.</span></div></div></article><article class="card"><h3>Forecasting vs detection</h3><p>Tornado forecasting starts with identifying environments favorable for severe thunderstorms. If the setup is right, the Storm Prediction Center can issue a watch. Detection happens closer to event time using radar, spotters, environmental clues, and warning decisions by local National Weather Service offices.</p></article><article class="card"><h3>What makes tornadoes dangerous</h3><p>Tornadoes account for only a tiny fraction of a thunderstorm's total energy, but that energy is focused into a very small area. The result is concentrated destruction from wind, flying debris, and rapid changes in direction and intensity.</p></article></div></section><section class="page" id="page-scale"><div class="section-title"><h2>Enhanced Fujita Scale</h2><p>The EF Scale has been operational since February 1, 2007 and rates tornadoes using estimated wind speeds inferred from damage.</p></div><div class="grid two"><article class="card"><h3>How the scale works</h3><p>The Enhanced Fujita Scale compares observed damage against standard damage indicators and degrees of damage. The result is an estimated wind-speed range and a rating from EF0 to EF5. It is based on damage, not direct wind measurement.</p><div class="scale"><div class="ef"><div class="box">EF0</div><div><h4>65–85 mph · Light</h4><p>Branches break, signs are damaged, and shallow-rooted trees may be pushed over.</p></div></div><div class="ef"><div class="box">EF1</div><div><h4>86–110 mph · Moderate</h4><p>Roofs are stripped, mobile homes can overturn, and vehicles may be pushed off roads.</p></div></div><div class="ef"><div class="box">EF2</div><div><h4>111–135 mph · Considerable</h4><p>Roofs are torn from homes, large trees are snapped, and mobile homes are demolished.</p></div></div><div class="ef"><div class="box">EF3</div><div><h4>136–165 mph · Severe</h4><p>Stories of well-built homes are heavily damaged, trains may overturn, and forests are shredded.</p></div></div><div class="ef"><div class="box">EF4</div><div><h4>166–200 mph · Devastating</h4><p>Well-constructed houses can be leveled and vehicles become dangerous missiles.</p></div></div><div class="ef"><div class="box">EF5</div><div><h4>201+ mph · Incredible</h4><p>Strong-frame homes can be swept away and heavy structures suffer extreme destruction.</p></div></div></div></article><article class="card"><h3>Important limits</h3><div class="fact-list"><div class="fact"><strong>Not the same as measured wind</strong><span>EF ratings are inferred from damage and engineering judgment, not usually from instruments placed in the tornado.</span></div><div class="fact"><strong>Construction quality matters</strong><span>How a structure is built can strongly affect damage, which is why the EF scale uses multiple indicators and damage levels.</span></div><div class="fact"><strong>Old F-scale vs EF-scale</strong><span>The original Fujita scale was replaced operationally in the U.S. on February 1, 2007.</span></div><div class="fact"><strong>Rare top-end tornadoes</strong><span>EF5 tornadoes are the most violent category and are extremely rare relative to weak tornadoes.</span></div></div></article></div></section><section class="page" id="page-records"><div class="section-title"><h2>Record book</h2><p>A curated set of major official U.S. tornado record categories and standout reference points.</p></div><div class="card"><h3>Major U.S. records</h3><div class="record-list" id="recordList"><div class="record"><div class="top"><h4>Deadliest tornado on record</h4><span class="pill">695 deaths</span></div><p>The March 18, 1925 Tri-State Tornado across Missouri, Illinois, and Indiana is widely cited as the deadliest tornado in U.S. history.</p></div><div class="record"><div class="top"><h4>Longest path length on record</h4><span class="pill">219 miles</span></div><p>The same 1925 Tri-State Tornado is also cited in official references for the longest tornado path length on record.</p></div><div class="record"><div class="top"><h4>Highest recorded tornado wind speed</h4><span class="pill">318 mph</span></div><p>Mobile Doppler radar measured 318 mph winds aloft in the May 3, 1999 Bridge Creek/Moore, Oklahoma tornado. NOAA notes this is the highest recorded tornado wind speed.</p></div><div class="record"><div class="top"><h4>Widest tornado on record</h4><span class="pill">2.6 miles</span></div><p>The May 31, 2013 El Reno, Oklahoma tornado exceeded the previous Hallam, Nebraska width mark and is cited in official NOAA references as 2.6 miles wide.</p></div><div class="record"><div class="top"><h4>Deadliest single U.S. tornado since 1950</h4><span class="pill">158 deaths</span></div><p>The May 22, 2011 Joplin, Missouri EF5 tornado is cited by NOAA as the deadliest single tornado since 1950.</p></div><div class="record"><div class="top"><h4>Largest Oklahoma outbreak on record</h4><span class="pill">1999 outbreak</span></div><p>NOAA describes the May 3, 1999 event as the largest tornado outbreak ever recorded in Oklahoma.</p></div><div class="record"><div class="top"><h4>Record-setting May tornado count</h4><span class="pill">May 2024</span></div><p>NOAA reported that May 2024 set a new record for the highest May tornado count, surpassing the previous May record.</p></div><div class="record"><div class="top"><h4>Recent annual total well above average</h4><span class="pill">1,559 in 2025</span></div><p>NOAA's 2025 annual tornado report said preliminary tornado reports reached 1,559, or 127% of the 1991–2020 annual average. NOAA's 2024 climate summary separately noted at least 1,735 confirmed tornadoes in 2024.</p></div></div></div></section><section class="page" id="page-history"><div class="section-title"><h2>Historic events</h2><p>Several outbreaks changed warning practices, building awareness, and the public memory of tornado risk.</p></div><div class="grid two"><article class="card"><h3>Timeline</h3><div class="timeline"><div class="event"><h4>March 18, 1925 · Tri-State Tornado</h4><p>Historic F5 assessment, 219-mile path, and roughly 695 fatalities. It remains the deadliest tornado on U.S. record lists.</p></div><div class="event"><h4>April 3–4, 1974 · Super Outbreak</h4><p>One of the most famous outbreak sequences in U.S. history, with dozens of violent tornadoes across multiple states.</p></div><div class="event"><h4>May 3, 1999 · Oklahoma/Kansas outbreak</h4><p>Produced the Bridge Creek/Moore F5 tornado where the highest recorded tornado wind speed was measured by mobile radar.</p></div><div class="event"><h4>April 25–28, 2011 · Super Outbreak</h4><p>A devastating multi-day event that included numerous violent tornadoes across the Southeast and Midwest.</p></div><div class="event"><h4>May 22, 2011 · Joplin, Missouri</h4><p>An EF5 tornado killed 158 people, making it the deadliest single U.S. tornado since 1950 in NOAA references.</p></div><div class="event"><h4>May 31, 2013 · El Reno, Oklahoma</h4><p>A massive, complex tornado reached a record width of 2.6 miles in official NOAA references.</p></div></div></article><article class="card"><h3>Why these matter</h3><p>Historic tornadoes are not just records. They are case studies used in meteorology, engineering, emergency management, radar research, and public safety training.</p><div class="mini-grid"><div class="mini"><strong>Radar research</strong><span>Bridge Creek/Moore 1999 reshaped how the public understands extreme wind measurements.</span></div><div class="mini"><strong>Warning policy</strong><span>Major outbreaks drove investment in watches, warnings, spotter networks, and communication systems.</span></div><div class="mini"><strong>Damage engineering</strong><span>Post-storm surveys help improve how damage indicators are used in EF ratings.</span></div><div class="mini"><strong>Preparedness culture</strong><span>Events like Joplin made sheltering and interior-room messaging much more visible.</span></div></div></article></div></section><section class="page" id="page-safety"><div class="section-title"><h2>Safety and alerts</h2><p>Knowing the language matters. Watches and warnings are not the same thing.</p></div><div class="grid two"><article class="card"><h3>Alert terms</h3><div class="alert-grid"><div class="alert warn"><strong>Tornado Watch</strong><span>Conditions are favorable for tornadoes and severe thunderstorms in and near the watch area. Use the time to review your plan.</span></div><div class="alert danger"><strong>Tornado Warning</strong><span>A tornado has been indicated by radar or reported by trained observers. You need to take shelter immediately.</span></div><div class="alert info"><strong>Tornado Emergency</strong><span>A rare, enhanced wording used when a confirmed, life-threatening tornado is moving into a populated area and catastrophic damage is expected.</span></div></div></article><article class="card"><h3>Best shelter basics</h3><div class="fact-list"><div class="fact"><strong>Go low</strong><span>Get to a basement if possible, or the lowest floor of a sturdy building.</span></div><div class="fact"><strong>Go interior</strong><span>Choose a small interior room, hallway, or closet away from windows.</span></div><div class="fact"><strong>Protect your head</strong><span>Use your arms, a helmet, mattress, or thick blankets to reduce injury from debris.</span></div><div class="fact"><strong>Vehicles are unsafe</strong><span>Cars and mobile homes are especially dangerous in tornadoes. Leave for stronger shelter well before the storm arrives.</span></div></div></article><article class="card"><h3>Night tornado problem</h3><p>Tornadoes at night are especially dangerous because they are harder to see and can catch sleeping people off guard. Redundant alerts matter: weather radio, phone warnings, local alerts, and a shelter plan.</p></article><article class="card"><h3>Misconceptions to avoid</h3><div class="fact-list"><div class="fact"><strong>"Open the windows" is a myth</strong><span>Do not waste time opening windows. Get to shelter immediately.</span></div><div class="fact"><strong>Overpasses are dangerous</strong><span>Wind can accelerate through them and debris can become deadly.</span></div><div class="fact"><strong>Tornadoes can occur outside classic Tornado Alley</strong><span>They happen in many regions, including the Southeast, Midwest, Plains, and beyond.</span></div></div></article></div></section><section class="page" id="page-facts"><div class="section-title"><h2>Fact Finder</h2><p>Search through a built-in library of quick tornado facts, terms, and records.</p></div><div class="search-wrap"><input class="search" id="factSearch" type="search" placeholder="Search: EF5, Joplin, width, warning, supercell, Tri-State..." /></div><div class="grid" id="factGrid"></div></section><section class="page" id="page-sources"><div class="section-title"><h2>Sources</h2><p></p></div><div class="card"><h3>Reference list</h3><p class="mono">NOAA / NSSL Severe Weather 101: Tornado Basics<br>NOAA / NSSL Severe Weather 101: Tornado Types<br>NOAA / NSSL Severe Weather 101: Tornado FAQ<br>NOAA / NSSL Severe Weather 101: Tornado Forecasting<br>NOAA / NSSL Severe Weather 101: Thunderstorm Types<br>NWS: The Enhanced Fujita Scale (EF Scale)<br>NCEI: U.S. Tornadoes monitoring pages and Monthly Tornado Reports<br>NWS Safety: Understand Tornado Alerts<br>NWS Norman: May 3, 1999 Great Plains Tornado Outbreak<br>NWS Paducah: 1925 Tri-State Tornado page<br>NOAA NSSL history page on the 2011 spring tornado outbreaks</p><div class="footer"> This reference is designed for learning and context. For current watches, warnings, and real-time storm risk, always rely on official National Weather Service products. </div></div></section></main></div><nav class="bottom-nav"><button class="nav-btn active" data-page="home">Home</button><button class="nav-btn" data-page="records">Records</button><button class="nav-btn" data-page="safety">Safety</button><button class="nav-btn" data-page="facts">Search</button></nav><script> const pages = [...document.querySelectorAll('.page')]; const tabs = [...document.querySelectorAll('[data-page]')]; function setPage(name){ pages.forEach(p=>p.classList.toggle('active', p.id === 'page-' + name)); tabs.forEach(t=>t.classList.toggle('active', t.dataset.page === name)); localStorage.setItem('tornadoAtlasPage', name); window.scrollTo({top:0, behavior:'smooth'}); } tabs.forEach(btn => btn.addEventListener('click', () => setPage(btn.dataset.page))); const saved = localStorage.getItem('tornadoAtlasPage'); if(saved && document.getElementById('page-' + saved)) setPage(saved); function drawLineChart(canvasId, labels, values, accent, suffix=''){ const c = document.getElementById(canvasId); const ctx = c.getContext('2d'); const w = c.width, h = c.height; ctx.clearRect(0,0,w,h); const pad = {l:52,r:20,t:22,b:42}; const max = Math.max(...values) * 1.15; ctx.strokeStyle = 'rgba(255,255,255,0.12)'; ctx.lineWidth = 1; ctx.font = '12px -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif'; ctx.fillStyle = 'rgba(210,229,247,0.72)'; for(let i=0;i<4;i++){ const y = pad.t + (h-pad.t-pad.b)*(i/3); ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(w-pad.r,y); ctx.stroke(); const val = Math.round(max - (max*(i/3))); ctx.fillText(val + suffix, 10, y + 4); } const step = (w-pad.l-pad.r)/(labels.length-1 || 1); ctx.beginPath(); values.forEach((v,i)=>{ const x = pad.l + step*i; const y = h-pad.b - (v/max)*(h-pad.t-pad.b); i===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y); }); ctx.strokeStyle = accent; ctx.lineWidth = 4; ctx.shadowBlur = 18; ctx.shadowColor = accent; ctx.stroke(); ctx.shadowBlur = 0; values.forEach((v,i)=>{ const x = pad.l + step*i; const y = h-pad.b - (v/max)*(h-pad.t-pad.b); ctx.fillStyle = accent; ctx.beginPath(); ctx.arc(x,y,5,0,Math.PI*2); ctx.fill(); ctx.fillStyle = '#eaf6ff'; ctx.fillText(labels[i], x-14, h-16); }); } function drawBarChart(canvasId, labels, values, accent){ const c = document.getElementById(canvasId); const ctx = c.getContext('2d'); const w = c.width, h = c.height; ctx.clearRect(0,0,w,h); const pad = {l:50,r:20,t:20,b:44}; const max = Math.max(...values) * 1.15; const bw = ((w-pad.l-pad.r) / values.length) * 0.58; ctx.font = '12px -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif'; ctx.fillStyle = 'rgba(210,229,247,0.72)'; ctx.strokeStyle = 'rgba(255,255,255,0.12)'; for(let i=0;i<4;i++){ const y = pad.t + (h-pad.t-pad.b)*(i/3); ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(w-pad.r,y); ctx.stroke(); const val = Math.round(max - (max*(i/3))); ctx.fillText(String(val), 10, y + 4); } values.forEach((v,i)=>{ const x = pad.l + ((w-pad.l-pad.r)/values.length)*i + 18; const y = h-pad.b - (v/max)*(h-pad.t-pad.b); const grad = ctx.createLinearGradient(0,y,0,h-pad.b); grad.addColorStop(0, accent); grad.addColorStop(1, 'rgba(98,211,255,0.16)'); ctx.fillStyle = grad; const radius = 12; roundRect(ctx, x, y, bw, (h-pad.b)-y, radius, true, false); ctx.fillStyle = '#eaf6ff'; ctx.fillText(labels[i], x + 2, h - 16); ctx.fillText(v.toLocaleString(), x + 2, y - 8); }); } function roundRect(ctx, x, y, width, height, radius, fill, stroke) { if (typeof radius === 'number') radius = {tl: radius, tr: radius, br: radius, bl: radius}; ctx.beginPath(); ctx.moveTo(x + radius.tl, y); ctx.lineTo(x + width - radius.tr, y); ctx.quadraticCurveTo(x + width, y, x + width, y + radius.tr); ctx.lineTo(x + width, y + height - radius.br); ctx.quadraticCurveTo(x + width, y + height, x + width - radius.br, y + height); ctx.lineTo(x + radius.bl, y + height); ctx.quadraticCurveTo(x, y + height, x, y + height - radius.bl); ctx.lineTo(x, y + radius.tl); ctx.quadraticCurveTo(x, y, x + radius.tl, y); ctx.closePath(); if (fill) ctx.fill(); if (stroke) ctx.stroke(); } drawLineChart('seasonChart', ['Apr', 'May', 'Jun'], [182.4, 268.4, 212.6], '#62d3ff', ''); drawBarChart('annualChart', ['Avg', '2024', '2025'], [1225, 1735, 1559], '#6ef0c2'); const facts = [
+  ["tornado season", "In the United States, tornadoes can happen in any month, but activity usually peaks in spring and early summer."],
+  ["peak months", "Across the U.S. as a whole, April, May, and June are typically the busiest tornado months."],
+  ["regional season", "Peak tornado season shifts by region, arriving earlier in the Gulf Coast and Southeast than in the northern Plains."],
+  ["time of day", "Many tornadoes form in the late afternoon and evening, when daytime heating has strengthened instability."],
+  ["night tornadoes", "Nighttime tornadoes are especially dangerous because they are harder to see and can strike while people are asleep."],
+  ["global distribution", "Tornadoes have been reported on every continent except Antarctica."],
+  ["most tornadoes", "The United States records more tornadoes than any other country in the world."],
+  ["tornado alley", "Tornado Alley is a broad nickname, not a strict boundary, and the most active corridor can shift over time."],
+  ["dixie alley", "The Southeast is often called Dixie Alley because strong, deadly tornadoes occur there in populated, forested areas."],
+  ["florida frequency", "Florida experiences many tornadoes, especially from thunderstorms and tropical systems, even though many are weaker than Plains tornadoes."],
+  ["supercells", "The strongest and longest-lived tornadoes are most often produced by supercell thunderstorms."],
+  ["mesocyclone", "A mesocyclone is a rotating updraft inside a supercell and is one of the key precursors to many significant tornadoes."],
+  ["wind shear", "Wind shear, a change in wind speed or direction with height, is one of the most important ingredients in tornado formation."],
+  ["instability", "Atmospheric instability helps air rise rapidly, feeding thunderstorms that can become tornadic."],
+  ["moisture", "Warm, moist air near the ground provides fuel for many tornado-producing thunderstorms."],
+  ["lift", "Storm systems, fronts, drylines, and outflow boundaries can provide the lift needed to trigger severe storms."],
+  ["wall cloud", "A wall cloud is a lowered part of a storm base that can form beneath a rotating updraft and sometimes precedes a tornado."],
+  ["funnel cloud", "A funnel cloud is not officially a tornado unless the circulation reaches the ground."],
+  ["invisible tornado", "Some tornadoes are difficult to see because the visible condensation funnel may not extend all the way to the ground."],
+  ["debris cloud", "A swirling debris cloud at ground level can reveal a tornado even when the funnel itself is faint or hidden by rain."],
+  ["multiple vortices", "Some tornadoes contain smaller, fast-spinning subvortices that orbit around the main circulation."],
+  ["wedge tornado", "A wedge tornado is wider than it is tall in appearance and is often associated with intense damage."],
+  ["rope tornado", "A rope tornado is narrow and twisted in appearance and often forms during the weakening stage of a tornado lifecycle."],
+  ["stovepipe tornado", "A stovepipe tornado has a tall, column-like shape and can still be extremely dangerous."],
+  ["satellite tornado", "A satellite tornado is a smaller tornado that rotates around a larger parent tornado."],
+  ["landspout", "A landspout forms from stretching near-ground rotation upward and is usually not associated with a mesocyclone."],
+  ["waterspout", "A waterspout is a tornado-like circulation over water, though some fair-weather waterspouts form differently from tornadic waterspouts."],
+  ["qclcs tornado", "Tornadoes can also form in squall lines or QLCS storms, where short-lived circulations may spin up quickly."],
+  ["hurricane tornadoes", "Tornadoes can form in the outer rainbands of landfalling hurricanes, especially on the storm’s right-front side."],
+  ["winter tornadoes", "Tornadoes can occur in winter when strong wind shear and an unstable air mass overlap."],
+  ["snow tornadoes", "In rare setups, tornadoes or tornado-like funnels can occur while snow is falling or near wintry precipitation."],
+  ["size variation", "Tornadoes range from very narrow tracks a few yards wide to giant wedges more than a mile across."],
+  ["widest tornado", "The El Reno, Oklahoma tornado of May 31, 2013 is widely cited as the widest tornado on record at about 2.6 miles wide."],
+  ["path length", "Tornado path lengths vary greatly, from a few hundred yards to more than 200 miles in extreme historic cases."],
+  ["tri state path", "The Tri-State Tornado of 1925 is famous for the longest continuous tornado path ever documented in the U.S., about 219 miles."],
+  ["forward speed", "Tornadoes are usually moving storms as well as rotating storms, and their forward speed can vary widely."],
+  ["fast moving tornadoes", "Some tornadoes have moved faster than 60 mph, giving people very little time to react."],
+  ["direction changes", "Tornadoes can change direction and speed suddenly, which makes them especially hard to judge visually."],
+  ["duration", "Most tornadoes last only a few minutes, but strong ones can persist much longer."],
+  ["short lived", "Most tornadoes are weak and short-lived compared with the rare violent tornadoes that dominate headlines."],
+  ["damage rating", "In the United States, tornadoes are rated using the Enhanced Fujita Scale, or EF Scale."],
+  ["ef0", "EF0 tornadoes are the weakest category and usually cause light damage such as broken branches, damaged shingles, and toppled signs."],
+  ["ef1", "EF1 tornadoes can peel roofs, overturn mobile homes, and push vehicles off roads."],
+  ["ef2", "EF2 tornadoes cause considerable damage and can destroy mobile homes, remove roofs, and snap large trees."],
+  ["ef3", "EF3 tornadoes are severe events that can heavily damage large buildings and throw heavy vehicles."],
+  ["ef4", "EF4 tornadoes are violent tornadoes capable of devastating well-built homes and causing extreme structural damage."],
+  ["ef5", "EF5 tornadoes represent the highest EF category and can sweep strong homes from foundations and deform large structures."],
+  ["damage based scale", "The EF Scale is based on observed damage and engineering judgment, not a direct wind measurement in most cases."],
+  ["wind estimate", "Meteorologists estimate tornado wind speeds by matching damage to known damage indicators and degrees of damage."],
+  ["damage survey", "After a tornado, survey teams inspect the path to assign an EF rating and document the storm’s track."],
+  ["direct measurements", "Direct wind measurements inside tornadoes are rare, so most ratings rely on damage surveys."],
+  ["record wind", "During the May 3, 1999 Oklahoma outbreak, mobile Doppler radar measured winds over 300 mph in a tornado near Bridge Creek and Moore."],
+  ["debris danger", "Flying debris causes many tornado injuries and deaths, not just the wind itself."],
+  ["vehicle risk", "Vehicles are dangerous places to be during a tornado because they can be rolled, lifted, or struck by debris."],
+  ["mobile homes", "Mobile homes are especially vulnerable in tornadoes and should be evacuated early for sturdier shelter when possible."],
+  ["best shelter", "The best protection is a basement, storm cellar, or safe room built to proper standards."],
+  ["interior room", "If no basement is available, a small interior room on the lowest floor and away from windows is the safest indoor choice."],
+  ["helmet safety", "Wearing a helmet can help reduce head injuries from falling or flying debris during a tornado."],
+  ["windows myth", "Opening windows does not protect a building from tornado pressure and wastes valuable time."],
+  ["overpass myth", "Sheltering under an overpass is dangerous because winds can intensify there and debris can funnel through the space."],
+  ["warning meaning", "A tornado warning means a tornado has been indicated by radar or reported by reliable sources and immediate action is needed."],
+  ["watch meaning", "A tornado watch means atmospheric conditions are favorable for tornadoes and severe storms, so people should stay alert."],
+  ["tornado emergency", "A tornado emergency is rare wording used for confirmed, life-threatening tornadoes threatening populated areas with catastrophic damage expected."],
+  ["sirens", "Outdoor warning sirens are designed to alert people outside and should not be your only way to receive warnings indoors."],
+  ["weather radio", "NOAA Weather Radio remains one of the most reliable backup ways to receive overnight tornado warnings."],
+  ["phone alerts", "Wireless emergency alerts can warn people quickly, but they work best when combined with multiple alert methods."],
+  ["doppler radar", "Doppler radar measures motion toward or away from the radar, helping meteorologists detect storm rotation."],
+  ["hook echo", "A hook echo on radar is a classic supercell feature that can indicate a tornado-producing storm."],
+  ["debris signature", "Modern dual-polarization radar can sometimes detect a tornado debris signature when debris is lofted into the air."],
+  ["spotters", "Trained storm spotters help verify tornadoes and improve real-time warning information."],
+  ["storm chasing", "Storm chasing has contributed to tornado research, photography, and field observations, though it carries serious risk."],
+  ["forecasting limits", "Forecasters can identify environments favorable for tornadoes, but predicting the exact time and location of a tornado remains difficult."],
+  ["lead time", "Average tornado warning lead times have improved over decades thanks to radar, forecasting, and communication advances."],
+  ["false alarms", "Forecasters often face a balance between providing early warnings and avoiding too many warnings for storms that never produce tornadoes."],
+  ["joplin 2011", "The Joplin, Missouri tornado of May 22, 2011 was rated EF5 and became one of the deadliest U.S. tornadoes in modern records."],
+  ["super outbreak 1974", "The 1974 Super Outbreak produced an extraordinary number of tornadoes across a large part of the eastern United States."],
+  ["super outbreak 2011", "The late April 2011 Super Outbreak produced hundreds of tornadoes, including many violent ones across the South and Midwest."],
+  ["bridge creek moore 1999", "The May 3, 1999 outbreak in Oklahoma is one of the most studied tornado events in history."],
+  ["jarrell 1997", "The Jarrell, Texas tornado of 1997 became infamous for its extreme damage and slow, devastating movement over homes."],
+  ["greensburg 2007", "The Greensburg, Kansas tornado of 2007 destroyed much of the town and was rated EF5."],
+  ["moore 2013", "The Moore, Oklahoma tornado of May 20, 2013 caused catastrophic damage in a densely populated area."],
+  ["tri state 1925", "The Tri-State Tornado moved through parts of Missouri, Illinois, and Indiana in March 1925 and remains central to U.S. tornado history."],
+  ["tupelo gainesville", "In April 1936, deadly tornadoes struck Tupelo, Mississippi and Gainesville, Georgia on consecutive days."],
+  ["natchez 1840", "The Natchez tornado of 1840 is among the deadliest tornadoes in U.S. history, especially due to the vulnerable river traffic it struck."],
+  ["woodward 1947", "The Woodward, Oklahoma tornado of 1947 became one of the classic violent tornado case studies of the pre-radar era."],
+  ["oklahoma city", "The Oklahoma City metro area has experienced multiple destructive tornado events over the decades."],
+  ["urban tornadoes", "Tornadoes can and do strike major cities, even though cities cover a smaller fraction of land than rural areas."],
+  ["repeat paths", "Some locations have been hit more than once, but tornadoes do not literally follow the same track every time."],
+  ["tree damage", "Violent tornadoes can strip bark from trees, leaving them denuded or snapped."],
+  ["pavement damage", "Extreme tornadoes have been reported to scour pavement, remove asphalt, and pull up road surfaces."],
+  ["train damage", "Tornadoes have overturned rail cars and moved very heavy vehicles under the right conditions."],
+  ["house foundations", "Violent tornadoes can sweep houses from foundations when winds are extreme and construction anchoring is weak."],
+  ["structural engineering", "Post-tornado surveys help engineers understand how buildings fail and how standards can be improved."],
+  ["safe rooms", "Residential and community safe rooms can dramatically improve survival in violent tornadoes when built to standards."],
+  ["school shelters", "School tornado sheltering plans are especially important because tornadoes can strike during the school day."],
+  ["drills", "Regular tornado drills help people react faster and with less confusion during real warnings."],
+  ["children safety", "Simple, practiced instructions are important because tornado warnings can create panic and fast decision-making is needed."],
+  ["pets", "Emergency plans should include pets, carriers, leashes, and quick access to shelter supplies."],
+  ["emergency kit", "A tornado kit can include flashlights, sturdy shoes, helmets, water, medicine, and a weather radio."],
+  ["power outages", "Major tornadoes often cause long power outages by damaging poles, lines, and substations."],
+  ["communication failures", "Cell service can become overloaded or interrupted after major tornadoes, making backup communication plans useful."],
+  ["flash flooding", "Tornado-producing storms can also bring dangerous flash flooding, hail, and damaging straight-line winds."],
+  ["hail connection", "Large hail often occurs in the same severe storm environments that can support tornadoes."],
+  ["dryline", "In the Plains, tornado outbreaks often form near a dryline, where hot dry air meets warm moist air."],
+  ["cold front", "Cold fronts can trigger severe thunderstorms and tornadoes when enough instability and shear are present."],
+  ["outflow boundary", "Old thunderstorm outflow boundaries can locally enhance rotation and help focus new tornado-producing storms."],
+  ["terrain", "Tornadoes can occur in hills, forests, valleys, and mountains, even though open Plains tornadoes are the most famous visually."],
+  ["appalachian tornadoes", "Tornadoes in the Southeast and Appalachians can be harder to see because of trees, hills, and rain-wrapped storms."],
+  ["rain wrapped", "A rain-wrapped tornado is hidden by precipitation and can be nearly impossible to see until it is very close."],
+  ["sound", "People often describe a tornado’s sound as a freight train roar, though not every tornado sounds the same."],
+  ["pressure", "Rapid pressure changes occur in tornadoes, but debris impact and wind forces are the main reasons buildings fail."],
+  ["eye myth", "Tornadoes do not have a calm eye like hurricanes in the public-safety sense, even if localized calm can occur in parts of a complex circulation."],
+  ["families", "Tornado families can occur when a storm repeatedly produces tornadoes in sequence over time."],
+  ["cyclic supercells", "Some supercells are cyclic, meaning they repeatedly reorganize and produce multiple tornadoes."],
+  ["occlusion", "A tornado can weaken when the parent storm’s circulation occludes and the low-level inflow is disrupted."],
+  ["strength changes", "Tornadoes can intensify and weaken very quickly, which is why visual size alone does not tell the whole story."],
+  ["weak tornadoes", "Most tornadoes are EF0 or EF1, even though EF4 and EF5 events receive the most public attention."],
+  ["violent tornado rarity", "EF4 and EF5 tornadoes are rare compared with the total number of tornadoes recorded each year."],
+  ["annual average", "The U.S. long-term average is roughly over one thousand tornadoes per year, though totals vary widely by year."],
+  ["record years", "Some recent years have had especially high tornado counts, but total count alone does not measure overall impact."],
+  ["fatality factors", "Tornado death tolls depend on time of day, housing type, warning response, path through populated areas, and storm intensity."],
+  ["southeast risk", "The Southeast has high tornado vulnerability because of trees, night events, mobile homes, and dense populations in risk corridors."],
+  ["canada tornadoes", "Canada experiences tornadoes too, especially in southern Ontario and the Prairie Provinces."],
+  ["europe tornadoes", "Europe has documented tornadoes, including strong ones, though far fewer than the United States."],
+  ["australia tornadoes", "Australia also experiences tornadoes, especially within severe thunderstorms."],
+  ["south america", "Strong tornadoes have occurred in parts of South America, especially in Argentina and nearby regions."],
+  ["asia tornadoes", "Tornadoes have been reported in parts of Asia, including Bangladesh, India, Japan, and China."],
+  ["antarctica", "Antarctica is the only continent without recorded tornadoes in the modern observational record."],
+  ["research value", "Historic tornadoes are studied not only for records, but for lessons in warning systems, engineering, emergency response, and public behavior."],
+  ["climate caution", "Scientists are cautious about simple claims linking any single tornado or year directly to climate change because tornado trends are complicated to measure."],
+  ["reporting bias", "Modern tornado counts include more weak tornadoes than older records because detection and reporting have improved."],
+  ["historic uncertainty", "Very old tornado records can be uncertain because radar, photography, and survey methods were far less advanced."],
+  ["public safety", "The most important tornado fact is practical: knowing where to shelter before a warning is issued can save lives."]
+]; const factGrid = document.getElementById('factGrid'); function renderFacts(query=''){ const q = query.trim().toLowerCase(); const filtered = facts.filter(([k,v]) => (k + ' ' + v).toLowerCase().includes(q)); factGrid.innerHTML = filtered.map(([k,v]) => `<article class="card"><h3>${k.replace(/\b\w/g,m=>m.toUpperCase())}</h3><p>${v}</p></article>`).join('') || `<article class="card"><h3>No match found</h3><p>Try a broader search like <em>warning</em>, <em>Tri-State</em>, <em>EF5</em>, or <em>supercell</em>.</p></article>`; } renderFacts(); document.getElementById('factSearch').addEventListener('input', e => renderFacts(e.target.value)); </script>
+
+<script>
+const SUPABASE_URL = "YOUR_SUPABASE_PROJECT_URL";
+const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
+
+let atlasSupabase = null;
+
+function atlasSetLockedState(isLocked){
+  document.body.classList.toggle("locked", isLocked);
+  const dock = document.getElementById("unlockDock");
+  const chip = document.getElementById("signedInChip");
+  if (dock) dock.classList.toggle("hidden", !isLocked);
+  if (chip) chip.style.display = isLocked ? "none" : "flex";
+
+  const activeTab = document.querySelector('.tab.active');
+  const activePage = activeTab ? activeTab.dataset.page : 'home';
+  if (isLocked && activePage !== 'home') {
+    const homeTab = document.querySelector('.tab[data-page="home"]');
+    if (homeTab) homeTab.click();
+  }
+}
+
+function atlasApplyUser(user){
+  const name = (user && (user.user_metadata?.full_name || user.user_metadata?.name || user.email)) || "Signed in";
+  const avatar = user && user.user_metadata?.avatar_url;
+  const chip = document.getElementById("signedInChip");
+  const nameNode = document.getElementById("signedInName");
+  const avatarNode = document.getElementById("signedInAvatar");
+  if (nameNode) nameNode.textContent = name;
+  if (avatarNode) {
+    avatarNode.src = avatar || "data:image/svg+xml;charset=UTF-8," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64"><rect width="100%" height="100%" rx="32" fill="#102038"/><text x="50%" y="54%" text-anchor="middle" font-family="Arial" font-size="28" fill="#dff8ff">' + (name || "A").trim().charAt(0).toUpperCase() + '</text></svg>');
+  }
+  if (chip) chip.title = name;
+}
+
+async function atlasInitAuth(){
+  const btn = document.getElementById("googleUnlockBtn");
+  const learn = document.getElementById("learnMoreBtn");
+
+  if (learn) {
+    learn.addEventListener("click", () => {
+      const factsTab = document.querySelector('.tab[data-page="facts"]');
+      const recordsTab = document.querySelector('.tab[data-page="records"]');
+      if (recordsTab) recordsTab.textContent = "Records";
+      if (factsTab) factsTab.textContent = "Fact Finder";
+      const banner = document.querySelector(".lock-banner span");
+      if (banner) banner.textContent = "Records, Historic Events, EF Scale, Safety, Fact Finder, and Sources unlock after sign-in.";
+    });
+  }
+
+  if (!window.supabase || SUPABASE_URL.includes("YOUR_SUPABASE") || SUPABASE_ANON_KEY.includes("YOUR_SUPABASE")) {
+    atlasSetLockedState(true);
+    if (btn) {
+      btn.addEventListener("click", () => {
+        alert("Add your Supabase project URL and anon key in the auth script first.");
+      });
+    }
+    return;
+  }
+
+  atlasSupabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  if (btn) {
+    btn.addEventListener("click", async () => {
+      const currentUrl = window.location.origin + window.location.pathname;
+      await atlasSupabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: currentUrl
+        }
+      });
+    });
+  }
+
+  const { data: { session } } = await atlasSupabase.auth.getSession();
+  if (session && session.user) {
+    atlasApplyUser(session.user);
+    atlasSetLockedState(false);
+  } else {
+    atlasSetLockedState(true);
+  }
+
+  atlasSupabase.auth.onAuthStateChange((_event, session) => {
+    if (session && session.user) {
+      atlasApplyUser(session.user);
+      atlasSetLockedState(false);
+    } else {
+      atlasSetLockedState(true);
+    }
+  });
+}
+
+document.addEventListener("DOMContentLoaded", atlasInitAuth);
+</script>
+
+</body>
+</html>
