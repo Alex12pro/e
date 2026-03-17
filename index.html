@@ -407,10 +407,11 @@ function activatePage(page){
 
 function renderFacts(query = ""){
   const grid = document.getElementById("factGrid");
-  if(!grid || !Array.isArray(facts)) return;
+  const factSource = Array.isArray(window.facts) ? window.facts : (typeof facts !== "undefined" && Array.isArray(facts) ? facts : []);
+  if(!grid) return;
 
   const q = String(query || "").trim().toLowerCase();
-  const filtered = facts.filter(item => {
+  const filtered = factSource.filter(item => {
     const title = Array.isArray(item) ? String(item[0]) : String(item);
     const text = Array.isArray(item) ? String(item[1]) : "";
     return !q || title.toLowerCase().includes(q) || text.toLowerCase().includes(q);
@@ -454,8 +455,7 @@ function wireUi(){
 }
 
 const SUPABASE_URL = "https://rgblufcuetyjqjaojztv.supabase.co";
-const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJnYmx1ZmN1ZXR5anFqYW9qenR2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM3ODAzNDksImV4cCI6MjA4OTM1NjM0OX0.IbnaFHMdb-Bfbvee5425Hg6REcwgILOaZvySjvs4NTI";
-
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJnYmx1ZmN1ZXR5anFqYW9qenR2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM3ODAzNDksImV4cCI6MjA4OTM1NjM0OX0.IbnaFHMdb-Bfbvee5425Hg6REcwgILOaZvySjvs4NT";
 
 let supabaseClient = null;
 
